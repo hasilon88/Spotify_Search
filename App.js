@@ -36,15 +36,17 @@ const RenderTracks = (props) => {
 
       const response = await fetch('https://api.spotify.com/v1/search?q=' + props.search + '&type=track', artistParam);
       const data = await response.json();
-      setSearchResult(data.tracks.items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        artist: item.artists[0].name,
-        album: [item.album.name, item.album.release_date, item.album.external_urls.spotify],
-        image: item.album.images[0].url,
-        hyperlink: item.external_urls.spotify,
-        musicDemo: item.preview_url
-      })));
+      if (data.tracks !== undefined) {
+        setSearchResult(data.tracks.items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          artist: item.artists[0].name,
+          album: [item.album.name, item.album.release_date, item.album.external_urls.spotify],
+          image: item.album.images[0].url,
+          hyperlink: item.external_urls.spotify,
+          musicDemo: item.preview_url
+        })));
+      }
     } search();
   }, [accessToken, props.search]);
 
@@ -52,11 +54,11 @@ const RenderTracks = (props) => {
     <div className='mx-2 row row-cols-3'>
       {searchResult.map((e) => {
         return (
-          <div class="card border-0 m-4 rounded" style={{ width: 19.5 + "rem", backgroundColor: "#28282B"}}>
+          <div class="card border-0 m-4 rounded" style={{ width: 19.5 + "rem", backgroundColor: "#28282B" }}>
             <a href={e.hyperlink} target='_blank' rel='noreferrer'>
-              <img class="card-img-top" src={e.image} alt=""/>
+              <img class="card-img-top" src={e.image} alt="" />
             </a>
-            <div class="card-body">
+            <div class="card-body text-white">
               <h4 class="card-title">{e.name}</h4>
               <p class="card-text">
                 Artist: <b>{e.artist}</b> <br />
